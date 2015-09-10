@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="bower_components/react/react.js"></script>
+    <script src="bower_components/react/JSXTransformer.js"></script>
+</head>
+<body>
+
+<div id="mount-point"></div>
+
+<script type="text/jsx">
+
+    // react code goes here
+
+    var ToDo = React.createClass({
+
+        getInitialState : function () {
+            return {
+                todoList : [],
+                inputValue : ''
+            }
+        },
+
+        getInputValue : function (event) {
+            this.setState({ inputValue : event.target.value });
+        },
+
+        addToDo : function () {
+            this.state.todoList.push(this.state.inputValue);
+            this.setState({ todoList : this.state.todoList, inputValue : '' });
+        },
+
+        removeTodo : function (todo) {
+            var filterTodoList = this.state.todoList.filter(function (todoItem) {
+                return todoItem !== todo;
+            });
+            this.setState({ todoList : filterTodoList });
+        },
+
+        render : function () {
+            var self = this;
+            var todoList = this.state.todoList.map(function (todo) {
+                return <div>
+                    <li className={ self.state.condition ? 'todoDone' : 'todoUndone' }>{ todo }<button onClick={ self.removeTodo.bind(self, todo) }>Remove</button></li>
+                </div>
+            });
+            return <div>
+                <input type="text" onChange={ this.getInputValue } value={ this.state.inputValue } />
+                <button onClick={ this.addToDo }>Add</button>
+                <ol>{ todoList }</ol>
+            </div>
+        }
+
+    });
+
+    React.render(
+            <ToDo></ToDo>,
+            document.getElementById('mount-point')
+    )
+
+</script>
+
+</body>
+</html>
